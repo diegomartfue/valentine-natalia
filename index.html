@@ -1,0 +1,1013 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>❤️</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            color: #111;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #FFDAE9, #f8c8dc, #e8b4d8, #ffd1dc, #FFDAE9);
+            background-size: 300% 300%;
+            animation: gradientShift 10s ease infinite;
+            overflow: auto;
+            padding: 24px;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            25% { background-position: 100% 0%; }
+            50% { background-position: 100% 100%; }
+            75% { background-position: 0% 100%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Floating hearts background layer */
+        .floating-hearts {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .floating-heart {
+            position: absolute;
+            bottom: -40px;
+            color: rgba(196, 30, 58, 0.12);
+            animation: floatUp linear infinite;
+            pointer-events: none;
+        }
+
+        @keyframes floatUp {
+            0% {
+                transform: translateY(0) rotate(0deg) scale(1);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-110vh) rotate(45deg) scale(0.8);
+                opacity: 0;
+            }
+        }
+
+        /* Envelope stage: no modal, just envelope on pink background */
+        #envelopeStage {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            position: fixed;
+            inset: 0;
+            z-index: 10;
+        }
+
+        body.show-modal .container {
+            display: flex;
+        }
+
+        .container {
+            display: none;
+            flex-direction: column;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.82);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            padding: 40px 36px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            box-shadow: 0 8px 32px rgba(196, 30, 58, 0.08), 0 2px 12px rgba(0,0,0,0.06);
+            width: fit-content;
+            max-width: min(650px, calc(100vw - 48px));
+            min-width: 0;
+            min-height: 520px;
+            max-height: calc(100vh - 48px);
+            overflow-y: auto;
+            position: relative;
+            z-index: 1;
+            transform-origin: center center;
+            transition: opacity 0.25s ease, transform 0.3s ease;
+        }
+
+        .modal-inner {
+            flex: 1 1 auto;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 0;
+            width: fit-content;
+            max-width: 100%;
+        }
+
+        .modal-view {
+            width: fit-content;
+            max-width: 100%;
+            opacity: 0;
+            transform: translateY(8px);
+            transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.34, 1.2, 0.64, 1);
+            display: none;
+        }
+
+        .modal-view.visible {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .envelope {
+            position: relative;
+            width: 220px;
+            height: 160px;
+            background: linear-gradient(145deg, #faf0e6, #f5e6d3, #efe0cc);
+            border: 1px solid #d4c4a8;
+            border-radius: 6px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.12), 0 0 30px rgba(196, 30, 58, 0.08);
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            animation: envelopeGlow 2.5s ease-in-out infinite;
+        }
+
+        @keyframes envelopeGlow {
+            0%, 100% { box-shadow: 0 4px 20px rgba(0,0,0,0.12), 0 0 30px rgba(196, 30, 58, 0.08); }
+            50% { box-shadow: 0 4px 20px rgba(0,0,0,0.12), 0 0 50px rgba(196, 30, 58, 0.18); }
+        }
+
+        .envelope:hover:not(.opening) {
+            transform: scale(1.05);
+            box-shadow: 0 8px 28px rgba(0,0,0,0.15), 0 0 40px rgba(196, 30, 58, 0.15);
+        }
+
+        .envelope-hint {
+            margin-top: 20px;
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            font-size: 15px;
+            color: rgba(120, 60, 70, 0.6);
+            opacity: 0;
+            animation: hintFadeIn 1.5s ease 1s forwards;
+        }
+
+        @keyframes hintFadeIn {
+            to { opacity: 1; }
+        }
+
+        .envelope-flap {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(165deg, #e8d5c4 0%, #d4c4a8 45%, #c9b89a 100%);
+            clip-path: polygon(0 0, 50% 50%, 100% 0);
+            transform-origin: top center;
+            transition: transform 0.8s cubic-bezier(0.34, 1.2, 0.64, 1);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .envelope-flap-outline {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .envelope-flap-outline line {
+            vector-effect: non-scaling-stroke;
+        }
+
+        .envelope.opening .envelope-flap {
+            transform: rotateX(-170deg);
+        }
+
+        .envelope-heart {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 40px;
+            height: 40px;
+            color: #c41e3a;
+            pointer-events: none;
+            z-index: 1;
+            transition: opacity 0.35s ease;
+            animation: heartPulse 1.8s ease-in-out infinite;
+            filter: drop-shadow(0 0 6px rgba(196, 30, 58, 0.3));
+        }
+
+        @keyframes heartPulse {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); }
+            15% { transform: translate(-50%, -50%) scale(1.15); }
+            30% { transform: translate(-50%, -50%) scale(1); }
+            45% { transform: translate(-50%, -50%) scale(1.08); }
+        }
+
+        .envelope-heart.hidden {
+            opacity: 0;
+        }
+
+        .envelope-heart svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        @media (min-width: 768px) {
+            .envelope {
+                width: 300px;
+                height: 218px;
+            }
+            .envelope-heart {
+                width: 52px;
+                height: 52px;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .envelope {
+                width: 340px;
+                height: 247px;
+            }
+            .envelope-heart {
+                width: 58px;
+                height: 58px;
+            }
+        }
+
+        .envelope-stage-fade-out {
+            animation: envelopeFadeOut 0.5s ease forwards;
+        }
+
+        .puzzle-stage-fade-in {
+            animation: fadeIn 0.6s ease forwards;
+        }
+
+        @keyframes envelopeFadeOut {
+            to { opacity: 0; transform: scale(0.96); }
+        }
+
+        .modal-view .modal-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 28px;
+            color: #2d1a24;
+            font-weight: 600;
+            font-style: italic;
+            line-height: 1.4;
+            margin-top: 16px;
+            margin-bottom: 32px;
+            letter-spacing: 0.02em;
+        }
+
+        .puzzle-container {
+            width: 40vh;
+            max-width: 100%;
+            margin: 0 auto;
+            background: rgba(255, 218, 233, 0.25);
+            padding: 10px;
+            border-radius: 14px;
+            transition: background 0.4s ease, box-shadow 0.4s ease;
+            box-shadow: 0 0 20px rgba(196, 30, 58, 0.06);
+        }
+
+        .puzzle-container.completed {
+            background: rgba(255, 255, 255, 0.5);
+            box-shadow: none;
+        }
+
+        .puzzle-grid-wrap {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 1;
+            margin: 0 auto;
+            transition: transform 0.6s cubic-bezier(0.34, 1.2, 0.64, 1);
+        }
+
+        .puzzle-grid-wrap.revealing {
+            transform: scale(0.88);
+            transition: transform 0.4s cubic-bezier(0.34, 1.2, 0.64, 1);
+        }
+
+        .puzzle-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: repeat(3, 1fr);
+            gap: 2px;
+            background: transparent;
+            padding: 0;
+            border-radius: 8px;
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            inset: 0;
+            transition: gap 0.1s ease, padding 0.1s ease, border-radius 0.1s ease;
+        }
+
+        .puzzle-grid.merging {
+            gap: 0;
+            padding: 0;
+            border-radius: 0;
+        }
+
+        .puzzle-tile {
+            min-width: 0;
+            min-height: 0;
+            background-size: 100% 100%;
+            background-repeat: no-repeat;
+            background-position: center;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: box-shadow 0.15s ease, border-radius 0.1s ease, transform 0.15s ease;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+            position: relative;
+        }
+
+        .puzzle-tile:hover:not(.empty) {
+            transform: scale(1.03) translateY(-1px);
+            box-shadow: 0 4px 16px rgba(196, 30, 58, 0.15), 0 2px 8px rgba(0,0,0,0.1);
+            z-index: 10;
+        }
+
+        .puzzle-grid.merging .puzzle-tile {
+            box-shadow: none;
+            border-radius: 0;
+        }
+
+        .puzzle-tile.empty {
+            box-shadow: none;
+            cursor: default;
+        }
+
+        .puzzle-full-image-overlay {
+            position: absolute;
+            inset: 0;
+            border-radius: 8px;
+            overflow: hidden;
+            opacity: 0;
+            transition: opacity 0.25s ease;
+            pointer-events: none;
+        }
+
+        .puzzle-full-image-overlay.show {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .puzzle-full-image-overlay img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .puzzle-tile.empty:hover {
+            transform: none;
+        }
+
+        .puzzle-reveal-text {
+            margin-top: 20px;
+        }
+
+        .puzzle-reveal-text .complete-line,
+        .puzzle-reveal-text .valentine-question,
+        .puzzle-reveal-text .yes-only-btn {
+            opacity: 0;
+            transform: translateY(10px);
+            transition: opacity 0.4s ease, transform 0.4s ease;
+        }
+
+        .puzzle-reveal-text.show .complete-line {
+            opacity: 1;
+            transform: translateY(0);
+            transition-delay: 0s;
+        }
+
+        .puzzle-reveal-text.show .valentine-question {
+            opacity: 1;
+            transform: translateY(0);
+            transition-delay: 0.25s;
+        }
+
+        .puzzle-reveal-text.show .yes-only-btn {
+            opacity: 1;
+            transform: translateY(0);
+            transition-delay: 0.5s;
+        }
+
+        .puzzle-reveal-text .complete-line {
+            font-family: 'Playfair Display', serif;
+            font-size: 20px;
+            font-style: italic;
+            color: #2d1a24;
+            margin-bottom: 12px;
+            line-height: 1.4;
+        }
+
+        .puzzle-reveal-text .valentine-question {
+            font-family: 'Playfair Display', serif;
+            font-size: 22px;
+            color: #c41e3a;
+            font-weight: 700;
+            margin-bottom: 16px;
+            text-shadow: 0 0 20px rgba(196, 30, 58, 0.15);
+        }
+
+        .shuffle-button {
+            font-family: 'Inter', sans-serif;
+            margin-top: 20px;
+            padding: 10px 25px;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            font-size: 1em;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 3px 10px rgba(245, 87, 108, 0.25);
+        }
+
+        .shuffle-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 20px rgba(245, 87, 108, 0.4);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.96) translateY(6px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        .heart {
+            font-size: 4em;
+            margin: 20px 0;
+            animation: heartbeat 1.5s ease-in-out infinite;
+        }
+
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            25% { transform: scale(1.1); }
+        }
+
+
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            pointer-events: none;
+        }
+
+        @keyframes confetti-fall {
+            to {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .sparkle {
+            position: fixed;
+            width: 6px;
+            height: 6px;
+            background: white;
+            border-radius: 50%;
+            pointer-events: none;
+            animation: sparkleAnim 1s ease-out;
+        }
+
+        @keyframes sparkleAnim {
+            0% {
+                transform: scale(0) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(1) rotate(180deg);
+                opacity: 0;
+            }
+        }
+
+        /* Celebration effect when puzzle solved */
+        @keyframes tileDisappear {
+            0% {
+                opacity: 1;
+                transform: scale(1) rotate(0deg);
+            }
+            100% {
+                opacity: 0;
+                transform: scale(0.5) rotate(180deg);
+            }
+        }
+
+        .tile-disappear {
+            animation: tileDisappear 0.5s ease forwards;
+        }
+
+        /* Base Yes button: defined before media queries so responsive font-size overrides apply */
+        .yes-only-btn {
+            font-family: 'Playfair Display', serif;
+            font-size: 20px;
+            padding: 14px 36px;
+            background: linear-gradient(135deg, #f5576c 0%, #f093fb 100%);
+            background-size: 200% 200%;
+            animation: btnGradient 3s ease infinite, btnPulse 2s ease-in-out infinite;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            margin-top: 12px;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            box-shadow: 0 4px 15px rgba(245, 87, 108, 0.3);
+        }
+
+        @keyframes btnGradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        @keyframes btnPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.03); }
+        }
+
+        .yes-only-btn:hover {
+            transform: scale(1.06);
+            box-shadow: 0 6px 25px rgba(245, 87, 108, 0.45);
+            animation: btnGradient 3s ease infinite;
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 16px;
+            }
+            .container {
+                padding: 20px 36px;
+                max-width: 94%;
+                min-height: 420px;
+            }
+            .modal-view .modal-title {
+                font-size: 22px;
+            }
+            .puzzle-reveal-text .complete-line,
+            .puzzle-reveal-text .valentine-question {
+                font-size: 18px;
+            }
+            .yes-only-btn {
+                font-size: 18px;
+            }
+            .success-yay {
+                font-size: 22px;
+            }
+            .puzzle-container {
+                max-width: min(360px, 40vh);
+            }
+        }
+
+        @media (max-width: 420px) {
+            body {
+                padding: 12px;
+            }
+            .container {
+                padding: 16px 36px;
+                max-width: 96%;
+                min-height: 380px;
+            }
+            .modal-view .modal-title {
+                font-size: 18px;
+            }
+            .puzzle-reveal-text .complete-line,
+            .puzzle-reveal-text .valentine-question {
+                font-size: 16px;
+            }
+            .yes-only-btn {
+                font-size: 16px;
+            }
+            .success-yay {
+                font-size: 18px;
+            }
+            .puzzle-container {
+                max-width: min(280px, 40vh);
+            }
+        }
+
+        @media (max-width: 360px) {
+            body {
+                padding: 10px;
+            }
+            .container {
+                padding: 12px 36px;
+                min-height: 340px;
+            }
+            .modal-view .modal-title {
+                font-size: 16px;
+            }
+            .puzzle-reveal-text .complete-line,
+            .puzzle-reveal-text .valentine-question {
+                font-size: 14px;
+            }
+            .yes-only-btn {
+                font-size: 14px;
+            }
+            .success-yay {
+                font-size: 16px;
+            }
+            .puzzle-container {
+                max-width: min(240px, 40vh);
+            }
+        }
+
+        /* Short viewport: shrink contents to respect padding / prevent overflow */
+        @media (max-height: 800px) {
+            body {
+                padding: 14px;
+            }
+            .container {
+                transform: scale(0.95);
+                transform-origin: center center;
+                padding: 22px 36px;
+            }
+        }
+        @media (max-height: 700px) {
+            body {
+                padding: 12px;
+            }
+            .container {
+                transform: scale(0.85);
+                transform-origin: center center;
+                padding: 20px 36px;
+            }
+        }
+        @media (max-height: 600px) {
+            .container {
+                transform: scale(0.72);
+                padding: 16px 36px;
+            }
+        }
+        @media (max-height: 500px) {
+            .container {
+                transform: scale(0.6);
+                padding: 12px 36px;
+            }
+        }
+        @media (max-height: 420px) {
+            .container {
+                transform: scale(0.5);
+                padding: 10px 36px;
+            }
+        }
+        /* Short and narrow: apply stronger scale so content fits */
+        @media (max-height: 600px) and (max-width: 480px) {
+            .container {
+                transform: scale(0.65);
+                padding: 12px 36px;
+            }
+        }
+        @media (max-height: 500px) and (max-width: 420px) {
+            .container {
+                transform: scale(0.55);
+                padding: 10px 36px;
+            }
+        }
+
+        /* Success view: no modal card, content on pink background only */
+        .container.container--success {
+            background: transparent;
+            backdrop-filter: none;
+            -webkit-backdrop-filter: none;
+            border: none;
+            box-shadow: none;
+            padding: 24px;
+        }
+
+        /* Success: Yay + gif + Reset */
+        .success-yay {
+            font-family: 'Playfair Display', serif;
+            font-size: 28px;
+            font-weight: 700;
+            color: #c41e3a;
+            margin-bottom: 20px;
+            text-shadow: 0 0 30px rgba(196, 30, 58, 0.2);
+            animation: successTextGlow 2s ease-in-out infinite;
+        }
+
+        @keyframes successTextGlow {
+            0%, 100% { text-shadow: 0 0 30px rgba(196, 30, 58, 0.2); }
+            50% { text-shadow: 0 0 40px rgba(196, 30, 58, 0.35); }
+        }
+
+        .success-gif-wrap {
+            margin: 0 auto 24px;
+            border-radius: 16px;
+            overflow: hidden;
+            max-width: 420px;
+            box-shadow: 0 8px 30px rgba(196, 30, 58, 0.15);
+        }
+
+        .success-gif-wrap img {
+            display: block;
+            width: 100%;
+            height: auto;
+        }
+
+        .reset-btn {
+            background: none;
+            border: none;
+            color: #666;
+            font-size: 0.9em;
+            cursor: pointer;
+            text-decoration: underline;
+            padding: 8px 12px;
+            margin-top: 8px;
+            font-family: inherit;
+        }
+
+        .reset-btn:hover {
+            color: #111;
+        }
+
+    </style>
+</head>
+<body>
+    <!-- Floating hearts background -->
+    <div class="floating-hearts" id="floatingHearts"></div>
+
+    <!-- ENVELOPE: no modal, just envelope on pink background -->
+    <div id="envelopeStage">
+        <div class="envelope" id="envelope">
+            <div class="envelope-heart" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M11.645 20.91l-.007-.003-.022-.012a15.247 15.247 0 01-.383-.218 25.18 25.18 0 01-4.244-3.17C4.688 15.36 2.25 12.174 2.25 8.25 2.25 5.322 4.714 3 7.688 3A5.5 5.5 0 0112 5.052 5.5 5.5 0 0116.313 3c2.973 0 5.437 2.322 5.437 5.25 0 3.925-2.438 7.111-4.739 9.256a25.175 25.175 0 01-4.244 3.17 15.247 15.247 0 01-.383.219l-.022.012-.007.004-.003.001a.752.752 0 01-.704 0l-.003-.001z" clip-rule="evenodd" /></svg>
+            </div>
+            <div class="envelope-flap">
+                <svg class="envelope-flap-outline" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+                    <line x1="0" y1="0" x2="50" y2="50" stroke="#d4c4a8" stroke-width="3" vector-effect="non-scaling-stroke" />
+                    <line x1="50" y1="50" x2="100" y2="0" stroke="#d4c4a8" stroke-width="3" vector-effect="non-scaling-stroke" />
+                </svg>
+            </div>
+        </div>
+        <p class="envelope-hint">tap to open</p>
+    </div>
+
+    <div class="container">
+        <div class="modal-inner">
+            <!-- VIEW: Puzzle (playing + completed state in same view) -->
+            <div id="puzzleView" class="modal-view">
+                <h1 class="modal-title">Mi linda Nat...</h1>
+                <div class="puzzle-container" id="puzzleContainer">
+                    <div class="puzzle-grid-wrap" id="puzzleGridWrap">
+                        <div class="puzzle-grid" id="puzzleGrid"></div>
+                        <div class="puzzle-full-image-overlay" id="puzzleFullImageOverlay">
+                            <img src="images/full-image.png" alt="" />
+                        </div>
+                    </div>
+                </div>
+                <div class="puzzle-reveal-text" id="puzzleRevealText">
+                    <p class="complete-line">...Te amo corazon.</p>
+                    <p class="valentine-question">Will you be my Valentine?</p>
+                    <button type="button" class="yes-only-btn" id="yesBtn">Yes</button>
+                </div>
+            </div>
+
+            <!-- VIEW: Success -->
+            <div id="successView" class="modal-view">
+                <p class="modal-title success-yay">Yupii!</p>
+                <div class="success-gif-wrap">
+                    <img src="giphy.gif" alt="" />
+                </div>
+                <button type="button" class="reset-btn" id="resetBtn">Reset</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Floating hearts background
+        (function initFloatingHearts() {
+            const container = document.getElementById('floatingHearts');
+            const heartCount = 12;
+            for (let i = 0; i < heartCount; i++) {
+                const heart = document.createElement('span');
+                heart.className = 'floating-heart';
+                heart.innerHTML = '\u2764';
+                const size = 14 + Math.random() * 22;
+                heart.style.fontSize = size + 'px';
+                heart.style.left = Math.random() * 100 + '%';
+                heart.style.animationDuration = (10 + Math.random() * 10) + 's';
+                heart.style.animationDelay = (Math.random() * 12) + 's';
+                heart.style.opacity = 0.06 + Math.random() * 0.1;
+                container.appendChild(heart);
+            }
+        })();
+
+        // ENVELOPE → MODAL (one modal, two views: puzzle + success)
+        const envelopeStage = document.getElementById('envelopeStage');
+        const envelope = document.getElementById('envelope');
+        const puzzleGrid = document.getElementById('puzzleGrid');
+        const puzzleView = document.getElementById('puzzleView');
+        const successView = document.getElementById('successView');
+        
+        envelope.addEventListener('click', () => {
+            envelope.style.pointerEvents = 'none';
+            const heart = envelope.querySelector('.envelope-heart');
+            heart.classList.add('hidden');
+            setTimeout(() => {
+                envelope.classList.add('opening');
+                setTimeout(() => {
+                    envelopeStage.classList.add('envelope-stage-fade-out');
+                    setTimeout(() => {
+                        envelopeStage.style.display = 'none';
+                        document.body.classList.add('show-modal');
+                        requestAnimationFrame(() => {
+                            requestAnimationFrame(() => puzzleView.classList.add('visible'));
+                        });
+                    }, 450);
+                }, 700);
+            }, 380);
+        });
+        
+        let tiles = [];
+        
+        // 3x3 puzzle: pieces 1–9, empty piece is 3 (top-right).
+        const EMPTY_PIECE = 3;
+        const solution = [1, 2, 3, 4, 5, 6, 7, 8, 9]; // empty (3) at index 2 = top-right
+        let currentState = [...solution];
+        
+        function initPuzzle() {
+            scramblePuzzle();
+            renderPuzzle();
+        }
+        
+        function scramblePuzzle() {
+            let lastMove = -1;
+            for (let i = 0; i < 100; i++) {
+                const emptyIndex = currentState.indexOf(EMPTY_PIECE);
+                const validMoves = getValidMoves(emptyIndex).filter(m => m !== lastMove);
+                const randomMove = validMoves[Math.floor(Math.random() * validMoves.length)];
+                lastMove = emptyIndex; // remember where empty was so we don't undo
+                [currentState[emptyIndex], currentState[randomMove]] = [currentState[randomMove], currentState[emptyIndex]];
+            }
+            // Make sure it's not accidentally solved
+            if (isPuzzleSolved()) {
+                scramblePuzzle();
+            }
+        }
+        
+        function getValidMoves(emptyIndex) {
+            const validMoves = [];
+            const row = Math.floor(emptyIndex / 3);
+            const col = emptyIndex % 3;
+            
+            if (row > 0) validMoves.push(emptyIndex - 3);
+            if (row < 2) validMoves.push(emptyIndex + 3);
+            if (col > 0) validMoves.push(emptyIndex - 1);
+            if (col < 2) validMoves.push(emptyIndex + 1);
+            
+            return validMoves;
+        }
+        
+        function renderPuzzle() {
+            puzzleGrid.innerHTML = '';
+            tiles = [];
+            
+            currentState.forEach((piece, index) => {
+                const tile = document.createElement('div');
+                tile.className = 'puzzle-tile';
+                
+                if (piece === EMPTY_PIECE) {
+                    tile.classList.add('empty');
+                    // No image: empty space is transparent until puzzle is solved
+                } else {
+                    tile.style.backgroundImage = `url('images/tile-${piece}.png')`;
+                    tile.onclick = () => moveTile(index);
+                }
+                
+                puzzleGrid.appendChild(tile);
+                tiles.push(tile);
+            });
+        }
+        
+        function moveTile(index) {
+            const emptyIndex = currentState.indexOf(EMPTY_PIECE);
+            const validMoves = getValidMoves(emptyIndex);
+            
+            if (validMoves.includes(index)) {
+                [currentState[emptyIndex], currentState[index]] = [currentState[index], currentState[emptyIndex]];
+                renderPuzzle();
+                
+                // Check if solved
+                if (isPuzzleSolved()) {
+                    setTimeout(onPuzzleSolved, 300);
+                }
+            }
+        }
+        
+        function isPuzzleSolved() {
+            return currentState.every((tile, index) => tile === solution[index]);
+        }
+        
+        function onPuzzleSolved() {
+            const puzzleContainer = document.getElementById('puzzleContainer');
+            const puzzleGridWrap = document.getElementById('puzzleGridWrap');
+            const puzzleRevealText = document.getElementById('puzzleRevealText');
+            const puzzleFullImageOverlay = document.getElementById('puzzleFullImageOverlay');
+            const emptyTile = puzzleGrid.querySelector('.puzzle-tile.empty');
+            if (emptyTile) emptyTile.style.backgroundImage = "url('images/tile-3.png')";
+            puzzleContainer.classList.add('completed');
+            puzzleGrid.classList.add('merging');
+            setTimeout(() => {
+                puzzleFullImageOverlay.classList.add('show');
+                setTimeout(() => {
+                    puzzleGridWrap.classList.add('revealing');
+                    puzzleRevealText.classList.add('show');
+                }, 250);
+            }, 280);
+        }
+        
+        function createSparkles(x, y) {
+            for (let i = 0; i < 5; i++) {
+                setTimeout(() => {
+                    const sparkle = document.createElement('div');
+                    sparkle.className = 'sparkle';
+                    sparkle.style.left = x + (Math.random() - 0.5) * 50 + 'px';
+                    sparkle.style.top = y + (Math.random() - 0.5) * 50 + 'px';
+                    sparkle.style.background = ['#f093fb', '#f5576c', '#ffd700'][Math.floor(Math.random() * 3)];
+                    document.body.appendChild(sparkle);
+                    setTimeout(() => sparkle.remove(), 1000);
+                }, i * 50);
+            }
+        }
+        
+        initPuzzle();
+        
+        const container = document.querySelector('.container');
+        document.getElementById('yesBtn').addEventListener('click', () => {
+            runConfettiFor(10000);
+            container.classList.add('container--success');
+            puzzleView.classList.remove('visible');
+            requestAnimationFrame(() => {
+                requestAnimationFrame(() => successView.classList.add('visible'));
+            });
+        });
+        
+        document.getElementById('resetBtn').addEventListener('click', () => {
+            window.location.reload();
+        });
+        
+        function runConfettiFor(ms) {
+            const end = Date.now() + ms;
+            function tick() {
+                if (Date.now() < end) {
+                    createConfetti();
+                    setTimeout(tick, 80);
+                }
+            }
+            tick();
+        }
+        
+        function createConfetti() {
+            const confetti = document.createElement('div');
+            confetti.className = 'confetti';
+            confetti.style.left = Math.random() * 100 + '%';
+            confetti.style.top = '-10px';
+            const colors = ['#f093fb', '#f5576c', '#ffd700', '#4facfe', '#FFDAE9', '#c41e3a'];
+            confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+            // Randomly make some confetti heart-shaped
+            if (Math.random() < 0.3) {
+                confetti.style.background = 'none';
+                confetti.innerHTML = '\u2764';
+                confetti.style.fontSize = (12 + Math.random() * 10) + 'px';
+                confetti.style.color = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.width = 'auto';
+                confetti.style.height = 'auto';
+            } else {
+                const size = 8 + Math.random() * 8;
+                confetti.style.width = size + 'px';
+                confetti.style.height = size + 'px';
+                confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+            }
+            const duration = 2 + Math.random() * 2;
+            confetti.style.animation = `confetti-fall ${duration}s linear`;
+            document.body.appendChild(confetti);
+            setTimeout(() => confetti.remove(), (duration + 0.5) * 1000);
+        }
+    </script>
+</body>
+</html>
