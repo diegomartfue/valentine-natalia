@@ -1,55 +1,101 @@
-# Valentine's Puzzle
+# 365 dias de nosotros
 
-A interactive sliding puzzle website to ask someone to be your Valentine!
+Pagina web interactiva para celebrar nuestro primer aniversario. Tres secciones: galeria de recuerdos, 38 razones de amor descubribles, y una carta animada con sobre.
 
-## Features
+## Estructura
 
-- Animated envelope that opens on click
-- 3x3 sliding puzzle with your custom image
-- Beautiful animations and effects
-- Confetti celebration on "Yes"
-- Mobile responsive
+```
+index.html          Pagina principal
+js/data.js          TODO el contenido editable (textos, fotos, razones, carta)
+js/app.js           Logica e interactividad
+css/styles.css      Estilos y animaciones
+images/anniversary/ Carpeta para tus fotos
+audio/              Carpeta para musica de fondo (opcional)
+```
 
-## Setup
+## Personalizar
 
-1. **Add your image tiles:**
-   - Cut your image into 3 x 3 squares (I used Figma, but you can probably do this programatically)
-   - Place your 9 PNG tiles in the `images/` folder
-   - Also replace your full image with `images/full-image.png`
-   - Name them `tile-1.png` through `tile-9.png`
-   - Tiles should be numbered left-to-right, top-to-bottom:
-     ```
-     tile-1.png   tile-2.png   tile-3.png
-     tile-4.png   tile-5.png   tile-6.png
-     tile-7.png   tile-8.png   tile-9.png
-     ```
-   - `tile-3.png` will be the empty space (top-right) but appear once the puzzle is completed
+Edita unicamente `js/data.js`. No necesitas tocar HTML, CSS ni app.js.
 
-2. **Change relevant strings**
-   - Unless your girl is also named "Gaby" it'd be real awkward if you forget to do this
-   - 
+### Fotos de recuerdos
 
-4. **Deploy to GitHub Pages:**
-   - Go to repository Settings
-   - Navigate to Pages section
-   - Source: Deploy from branch
-   - Branch: main (or master)
-   - Click Save
+1. Coloca tus fotos en `images/anniversary/`
+2. En `data.js`, actualiza cada entrada de `memories` con la ruta, titulo, fecha y descripcion:
 
-5. **Share the link!**
-   - Your site will be at: `https://YOUR-USERNAME.github.io/valentine-puzzle/`
+```javascript
+{
+  id: 1,
+  image: 'images/anniversary/primer-cita.jpg',
+  title: 'Nuestra primera cita',
+  date: 'Enero 2026',
+  description: 'Fuimos al cafe donde todo comenzo...'
+}
+```
 
-## How It Works
+### Razones
 
-0. **Stage 0:** Letter appears on screen (click to open)
-1. **Stage 1:** She solves the 3x3 sliding puzzle to reveal your photo
-2. **Stage 2:** The full image appears with "...you complete me." and "Will you be my Valentine?" and a Yes button
-3. **Stage 3:** When she clicks "Yes", it's celebration time!
+Las 38 razones ya estan escritas. Puedes modificar el texto, agregar o eliminar razones. Cada una necesita un `id` unico, `text` y `category`.
 
-## Customization
+### Carta
 
-You can customize the messages in `index.html` (e.g. the greeting, completion text, and success stage).
+Reemplaza el texto placeholder en `letter.body` con tu carta personal. Cada elemento del arreglo es un parrafo separado:
+
+```javascript
+body: [
+  'Primer parrafo de tu carta...',
+  'Segundo parrafo...',
+  'Tantos como quieras.'
+]
+```
+
+### Foto especial (carta)
+
+Agrega una foto al final de la carta:
+
+```javascript
+image: 'images/anniversary/foto-especial.jpg'
+```
+
+### Musica de fondo
+
+1. Coloca un archivo MP3 en `audio/`
+2. Actualiza la ruta y activa la musica:
+
+```javascript
+music: {
+  file: 'audio/nuestra-cancion.mp3',
+  enabled: true
+}
+```
+
+## Desarrollo local
+
+```bash
+python3 -m http.server 8080
+```
+
+Abre `http://localhost:8080` en tu navegador.
+
+## Deploy en GitHub Pages
+
+1. Haz commit y push de tus cambios
+2. Ve a Settings > Pages en tu repositorio
+3. Source: Deploy from branch
+4. Branch: main
+5. Tu sitio estara en: `https://TU-USUARIO.github.io/valentine-natalia/`
+
+## Funcionalidades
+
+- Seccion de bienvenida con animacion de particulas
+- Galeria de recuerdos estilo polaroid con cinta decorativa
+- 38 razones interactivas con progreso guardado en localStorage
+- Boton "Sorprendeme" para descubrir razones al azar
+- Carta animada con sobre que se abre al tocar
+- Navegacion fija con scroll suave
+- Animaciones de revelacion al hacer scroll
+- Diseno mobile-first responsive
+- Toggle de musica de fondo (sin autoplay)
 
 ---
 
-Made with ❤️ for Valentine's Day
+Hecho con amor para Natalia
